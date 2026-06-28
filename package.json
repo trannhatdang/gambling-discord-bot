@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "discord.js": "^14.26.4",
+    "firebase": "^12.15.0"
+  },
+  "scripts": {
+	"dev": "node --env-file=.env index.js"
+  }
+}
