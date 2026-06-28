@@ -1,5 +1,9 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc, writeBatch } from 'firebase/firestore/lite';
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, addDoc, 
+	query, where,
+	writeBatch, doc, setDoc,
+	getDocs, getDocFromCache } = require('firebase/firestore/lite');
+const { User, userConverter } = require('./user-converter.js')
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -13,22 +17,39 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function writeUserData(username, points)
-{
-	try {
-	  const docRef = await addDoc(collection(db, "users"), {
-	    username: username,
-	    points: points
-	  });
-	  console.log("Document written with ID: ", docRef.id);
-	} catch (e) {
-	  console.error("Error adding document: ", e);
+module.exports = {
+	async writeUserData(username, points){
+		try {
+			const ref = doc(db, 'users').withConverter(userConverter);
+			const docRef = await setDoc(ref, new User(username, points, Date.now()));
+			console.log("Document written with ID: ", docRef.id);
+		} catch (e) {
+			console.error("Error adding document: ", e);
+		}
+	},
+	async getUserData(username){
+		try{
+			const q = query(collection(db, 'users')
+				,where('points', '==', username)
+			)
+			const querySnapshot = await getDocs(q);
+			console.log(querySnapshot)
+			console.log("Got Users Document.");
+			return querySnapshot.data();
+		} catch (e) {
+			console.error("Error getting document: ", e);
+		}
+	},
+	async updateUserData(userData){
+		try{
+			const docRef = collection(db, 'users');
+			const q = query(docRef,
+				where('username', '==', userData.username)
+			)
+			console.log(`query res: ${q}`);
+		}
+		catch (e) {
+			console.error("Erorr updating document: ", e);
+		}
 	}
 }
-
-// export async function writeBatchUserData(usernameList, pointList)
-// {
-// 	try {
-// 		const docRe
-// 	}
-// }

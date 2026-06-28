@@ -5,7 +5,8 @@ const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require(
 const token = process.env.DISCORD_TOKEN;
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages,
+					GatewayIntentBits.MessageContent] });
 
 client.commands = new Collection()
 const foldersPath = path.join(__dirname, 'commands');
@@ -26,16 +27,21 @@ for (const folder of commandFolders) {
 	}
 }
 
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith('.js'));
-for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
+try {
+	const eventsPath = path.join(__dirname, 'events');
+	const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith('.js'));
+	for (const file of eventFiles) {
+		const filePath = path.join(eventsPath, file);
+		const event = require(filePath);
+		if (event.once) {
+			client.once(event.name, (...args) => event.execute(...args));
+		} else {
+			client.on(event.name, (...args) => event.execute(...args));
+		}
 	}
+}
+catch (e) {
+	console.log(e)
 }
 
 // Log in to Discord with your client's token

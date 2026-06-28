@@ -5,8 +5,6 @@ const token = process.env.DISCORD_TOKEN;
 const clientId = process.env.CLIENT_ID;
 const guildId = process.env.GUILD_ID;
 
-console.log(token)
-
 const commands = [];
 // Grab all the command folders from the commands directory you created earlier
 const foldersPath = path.join(__dirname, 'commands');
@@ -37,7 +35,7 @@ const rest = new REST().setToken(token);
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 		// The put method is used to fully refresh all commands in the guild with the current set
-		const data = await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands });
+		const data = await rest.put(Routes.applicationCommands(clientId), { body: commands });
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
