@@ -5,6 +5,6 @@ module.exports = {
 	data: new SlashCommandBuilder().setName('get-points').setDescription('Xem Điểm'),
 	async execute(interaction) {
 		const data = await getUserData(interaction.user.id);
-		console.log(data)
+		await interaction.reply(`You have ${data.points}!`)
 	},
 };
