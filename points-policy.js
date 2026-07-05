@@ -8,17 +8,16 @@ const PointsEventEnum = Object.freeze({
 
 module.exports = {
 	PointsEvent: PointsEventEnum,
-	async addPoints(username, pointsEvent){
+	async addPoints(id, pointsEvent){
 		switch(pointsEvent){
 			case PointsEventEnum.Message:
-				userData = await getUserData(username);
+				userData = await getUserData(id);
 				userData.points += messagePoints;
-				await updateUserData(userData);
+				await updateUserData(id, userData);
 				break;
 			default:
 				console.log('default case');
 				break;
-
 		}
 
 	}

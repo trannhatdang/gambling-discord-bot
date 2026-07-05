@@ -4,7 +4,7 @@ const { addPoints, PointsEvent } = require('../points-policy.js');
 module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
-		// await addPoints(message.author.username, PointsEvent.Message);
+		// await addPoints(message.author.id, PointsEvent.Message);
 		// console.log(`Added message points for ${message.author.username}`);
 	},
 };

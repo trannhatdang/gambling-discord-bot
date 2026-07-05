@@ -4,6 +4,7 @@
     "firebase": "^12.15.0"
   },
   "scripts": {
-	"dev": "node --env-file=.env index.js"
+	"dev": "node --env-file=.env index.js",
+	"deploy-commands": "node --env-file=.env deploy-commands.js"
   }
 }
